@@ -6,7 +6,7 @@ body {
 body h1{
     font-size: 40px;
     margin-bottom: 20px;
-    font-family: cursive;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
   #map {
@@ -16,7 +16,7 @@ body h1{
   }
 
   .tooltip {
-    background-color: white;
+    background-color: rgb(255, 215, 215);
     border-radius: 3px;
     padding: 5px;
     font-size: 12px;
@@ -33,4 +33,35 @@ body h1{
     justify-content: center;
     user-select: none;
     pointer-events: auto;
+  }
+
+/* Tool tip styling */
+/*  popup container */
+.mapboxgl-popup {
+    max-width: 250px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  }
+  
+  /* inner content box */
+  .mapboxgl-popup-content {
+    background-color: #fe7070;
+    border-radius: 8px;
+    padding: 10px 15px;
+    color: #333;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  
+  /* a little arrow styling */
+  .mapboxgl-popup-tip {
+    border-top-color: #f5f5f5 !important;
+  }
+  
+  /* make text bold and prettier */
+  .mapboxgl-popup-content strong {
+    display: block;
+    color: #45110c;
+    font-size: 15px;
+    margin-bottom: 5px;
   }
