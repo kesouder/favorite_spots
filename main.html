@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Static Heart Marker Map</title>
+
+  <!-- Mapbox GL JS -->
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+  <h1>Our Favorite Spots ❤️</h1>
+  <div id="map"></div>
+
+  <script>
+    // Set your Mapbox access token
+    mapboxgl.accessToken = 'pk.eyJ1Ijoia2V2aW5zb3VkZXIiLCJhIjoiY21kbmhnbTFtMDFyeTJucHNma2luZDl6eiJ9.GmyJPyPxl7aFhsKMPsuYJw';
+
+    // Initialize the map
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v12',
+      center: [-117.2563, 32.8610], // [longitude, latitude]
+      zoom: 10
+    });
+
+    map.addControl(new mapboxgl.NavigationControl());
+
+    // Load location data
+    fetch('locations.json')
+      .then(response => response.json())
+      .then(data => {
+        const bounds = new mapboxgl.LngLatBounds();
+        const spots = data.favorite_spots || data;
+
+        spots.forEach(location => {
+          const lon = location.lon || location.longitude;
+          const lat = location.lat || location.latitude;
+
+          // Create static heart marker
+          const el = document.createElement('div');
+          el.textContent = '❤️';
+          el.className = 'heart-marker';
+
+          const marker = new mapboxgl.Marker(el, {
+            offset: [0, 0],
+            anchor: 'center'
+          })
+          .setLngLat([lon, lat])
+          .addTo(map);
+
+          // Tooltip popup
+          const popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false,
+            offset: 25
+          }).setHTML(`<div class="tooltip"><strong>${location.name}</strong><br>${location.description || ''}</div>`);
+
+          marker.getElement().addEventListener('mouseenter', () => {
+            popup.addTo(map).setLngLat([lon, lat]);
+          });
+
+          marker.getElement().addEventListener('mouseleave', () => {
+            popup.remove();
+          });
+
+          bounds.extend([lon, lat]);
+        });
+
+        map.fitBounds(bounds, { padding: 40 });
+      })
+      .catch(error => {
+        console.error('Error loading locations:', error);
+        alert('Could not load locations. Make sure locations.json is in the same directory.');
+      });
+  </script>
+</body>
+</html>
